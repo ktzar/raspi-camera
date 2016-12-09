@@ -1,0 +1,30 @@
+html
+    head
+        title= title
+        link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' rel='stylesheet')
+    body
+        div.container
+            h1 Photos
+            a(href=prevPage, class='btn btn-default') 
+                span.glyphicon-chevron-left.glyphicon
+                span Previous
+            a(href=nextPage, class='btn btn-default') 
+                span Next
+                span.glyphicon-chevron-right.glyphicon
+            hr
+            span.clear
+            each photo in photos
+                div.col-md-6.text-center
+                    a(href=photo)
+                        img.img-thumbnail(src=photo)
+                    br
+                    span #{photo}
+            span.clear
+            hr
+            a(href=prevPage, class='btn btn-default') 
+                span.glyphicon-chevron-left.glyphicon
+                span Previous
+            a(href=nextPage, class='btn btn-default') 
+                span Next
+                span.glyphicon-chevron-right.glyphicon
+
