@@ -1,20 +1,20 @@
 const fs = require('fs');
-const sys = require('sys');
 const path = require('path');
 const express = require('express');
 const exec = require('child_process').exec;
 const http = require('http');
 const moment = require('moment');
 const redis = require('redis');
-const port = process.env.PORT || '3000';
+const port = process.env.PORT || '8000';
 
-const PAGE_SIZE = 12;
+const picturePath = "/tmp/camera_pic.jpg";
+const camera_command = "raspistill -w 1296 -h 972 -q 10 -ex verylong -ISO 800 -rot 270 -o %s";
+const shots_dir = "/home/pi/camera/shots/";
+const PAGE_SIZE = 24;
 
 var app = express();
 var client = redis.createClient();
 
-const camera_command = "raspistill -q 10 -ISO 800 -rot 270 -o %s";
-const shots_dir = "/home/pi/camera/shots/";
 
 app.set('views', './views');
 app.set('view engine', 'pug');
@@ -48,9 +48,8 @@ app.get('/save', (req, res, next) => {
 });
 
 app.get('/camera', (req, res, next) => {
-    const picturePath = "/tmp/camera_pic.jpg";
     exec(camera_command.replace("%s", picturePath), (error, stdout, stderr) => {
-        res.sendfile(picturePath, {headers: {"Content-type": "image/jpeg"}},
+        res.sendFile(picturePath, {headers: {"Content-type": "image/jpeg"}},
             () => {
                 if (req.query.save === undefined) {
                     fs.unlink(picturePath);
